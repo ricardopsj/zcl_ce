@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZCL_CE</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Generic conversion exit&apos;s messages</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCL_CE</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>El parametro &amp; tiene un tipo no soportado</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCL_CE</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Un expected error calling function module &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCL_CE</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Unit of Measure &amp; not defined in table T006</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCL_CE</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Overflow output converting curr &amp; &amp;</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>
