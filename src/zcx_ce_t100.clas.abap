@@ -5,8 +5,8 @@ class ZCX_CE_T100 definition
 
 public section.
 
-  interfaces IF_T100_DYN_MSG .
   interfaces IF_T100_MESSAGE .
+  interfaces IF_T100_DYN_MSG .
 
   data MSGV1 type SYMSGV read-only .
   data MSGV2 type SYMSGV read-only .
@@ -61,7 +61,7 @@ endif.
   endmethod.
 
 
-  method GET_MSGID_MSGNO.
+  method get_msgid_msgno.
     msgid_msgno = if_t100_message~t100key-msgid && if_t100_message~t100key-msgno.
   endmethod.
 
