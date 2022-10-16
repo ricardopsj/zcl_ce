@@ -5,6 +5,8 @@ class zcl_ce definition
 
   public section.
 
+    types ty_shift type i .
+
     class-methods call_ce_function
       importing
         !convexit type clike
@@ -41,14 +43,14 @@ class zcl_ce definition
       importing
         !waers       type clike
       returning
-        value(shift) type i
+        value(shift) type ty_shift
       raising
         zcx_ce_t100 .
     class-methods get_waers_shift_out
       importing
         !waers       type clike
       returning
-        value(shift) type i
+        value(shift) type ty_shift
       raising
         zcx_ce_t100 .
     class-methods input

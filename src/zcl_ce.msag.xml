@@ -7,32 +7,38 @@
     <MASTERLANG>E</MASTERLANG>
     <STEXT>Generic conversion exit&apos;s messages</STEXT>
    </T100A>
-   <T100>
-    <T100>
+   <I18N_LANGS>
+    <LANGU>E</LANGU>
+   </I18N_LANGS>
+   <T100T>
+    <T100T>
      <SPRSL>E</SPRSL>
      <ARBGB>ZCL_CE</ARBGB>
+     <STEXT>Generic conversion exit&apos;s messages</STEXT>
+    </T100T>
+   </T100T>
+   <T100_TEXTS>
+    <item>
+     <SPRSL>E</SPRSL>
      <MSGNR>000</MSGNR>
      <TEXT>Paremeter &amp; doesn&apos;t have a supported type</TEXT>
-    </T100>
-    <T100>
+    </item>
+    <item>
      <SPRSL>E</SPRSL>
-     <ARBGB>ZCL_CE</ARBGB>
      <MSGNR>001</MSGNR>
      <TEXT>Un expected error calling function module &amp;</TEXT>
-    </T100>
-    <T100>
+    </item>
+    <item>
      <SPRSL>E</SPRSL>
-     <ARBGB>ZCL_CE</ARBGB>
      <MSGNR>002</MSGNR>
      <TEXT>Unit of Measure &amp; not defined in table T006</TEXT>
-    </T100>
-    <T100>
+    </item>
+    <item>
      <SPRSL>E</SPRSL>
-     <ARBGB>ZCL_CE</ARBGB>
      <MSGNR>003</MSGNR>
      <TEXT>Overflow output converting curr &amp; &amp;</TEXT>
-    </T100>
-   </T100>
+    </item>
+   </T100_TEXTS>
   </asx:values>
  </asx:abap>
 </abapGit>

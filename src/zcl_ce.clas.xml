@@ -257,6 +257,18 @@
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>ZCL_CE</CLSNAME>
+     <CMPNAME>TY_SHIFT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Currency Conversion Exit Shift</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_CE</CLSNAME>
+     <CMPNAME>TY_SHIFT</CMPNAME>
+     <LANGU>S</LANGU>
+     <DESCRIPT>Desplazamiento Moneda</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_CE</CLSNAME>
      <CMPNAME>T_TCURX</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Decimal Places in Currencies</DESCRIPT>
