@@ -1,76 +1,85 @@
-class zcl_ce definition
+class ZCL_CE definition
   public
   final
   create public .
 
-  public section.
+public section.
 
-    types ty_shift type i .
+  types TY_SHIFT type I .
 
-    class-methods call_ce_function
-      importing
-        !convexit type clike
-        !dir      type clike
-        !input    type clike
-      exporting
-        !output   type clike .
-    class-methods call_ce_input
-      importing
-        !convexit type clike
-        !input    type clike
-      exporting
-        !output   type clike .
-    class-methods call_ce_output
-      importing
-        !convexit type clike
-        !input    type clike
-      exporting
-        !output   type clike .
-    class-methods get_user_decimal_sep
-      returning
-        value(decimal_sep) type char1 .
-    class-methods get_user_group_sep
-      returning
-        value(group_sep) type char1 .
-    class-methods get_waers_dec
-      importing
-        !waers         type clike
-      returning
-        value(currdec) type currdec
-      raising
-        zcx_ce_t100 .
-    class-methods get_waers_shift_in
-      importing
-        !waers       type clike
-      returning
-        value(shift) type ty_shift
-      raising
-        zcx_ce_t100 .
-    class-methods get_waers_shift_out
-      importing
-        !waers       type clike
-      returning
-        value(shift) type ty_shift
-      raising
-        zcx_ce_t100 .
-    class-methods input
-      importing
-        !input  type any
-        !waers  type any optional
-        !msehi  type any optional
-      changing
-        !output type any
-      raising
-        zcx_ce_t100 .
-    class-methods output
-      importing
-        !input  type any
-        !waers  type any optional
-        !msehi  type any optional
-      changing
-        !output type any
-      raising
-        zcx_ce_t100 .
+  class-methods CALL_CE_FUNCTION
+    importing
+      !CONVEXIT type CLIKE
+      !DIR type CLIKE
+      !INPUT type CLIKE
+    exporting
+      !OUTPUT type CLIKE .
+  class-methods CALL_CE_INPUT
+    importing
+      !CONVEXIT type CLIKE
+      !INPUT type CLIKE
+    exporting
+      !OUTPUT type CLIKE .
+  class-methods CALL_CE_OUTPUT
+    importing
+      !CONVEXIT type CLIKE
+      !INPUT type CLIKE
+    exporting
+      !OUTPUT type CLIKE .
+  class-methods GET_USER_DECIMAL_SEP
+    returning
+      value(DECIMAL_SEP) type CHAR1 .
+  class-methods GET_USER_GROUP_SEP
+    returning
+      value(GROUP_SEP) type CHAR1 .
+  class-methods GET_WAERS_DEC
+    importing
+      !WAERS type CLIKE
+    returning
+      value(CURRDEC) type CURRDEC
+    raising
+      ZCX_CE_T100 .
+  class-methods GET_WAERS_SHIFT_IN
+    importing
+      !WAERS type CLIKE
+    returning
+      value(SHIFT) type TY_SHIFT
+    raising
+      ZCX_CE_T100 .
+  class-methods GET_WAERS_SHIFT_OUT
+    importing
+      !WAERS type CLIKE
+    returning
+      value(SHIFT) type TY_SHIFT
+    raising
+      ZCX_CE_T100 .
+  class-methods INPUT
+    importing
+      !INPUT type ANY
+      !WAERS type ANY optional
+      !MSEHI type ANY optional
+    changing
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_STRING
+    importing
+      !INPUT type ANY
+      !WAERS type ANY optional
+      !MSEHI type ANY optional
+    returning
+      value(OUTPUT) type STRING
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT
+    importing
+      !INPUT type ANY
+      !WAERS type ANY optional
+      !MSEHI type ANY optional
+    changing
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
   protected section.
   private section.
 
@@ -464,5 +473,16 @@ CLASS ZCL_CE IMPLEMENTATION.
     write input unit msehi to lv_char128.
     shift lv_char128 left deleting leading space.
     output = lv_char128.
+  endmethod.
+
+
+  method output_string.
+    try.
+        output( exporting input = input
+                          waers = waers
+                          msehi = msehi
+                 changing output = output ).
+      catch zcx_ce_t100 into data(ref_ce_t100).
+    endtry.
   endmethod.
 ENDCLASS.
