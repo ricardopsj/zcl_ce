@@ -245,7 +245,7 @@ class ltcl_test implementation.
         cl_abap_unit_assert=>assert_true( act = boolc( ref_t100->get_msgid_msgno( ) eq 'ZCL_CE003' )
                                   msg = 'Un expedted error: ' && ref_t100->get_text( ) ).
       catch cx_root into data(ref_root).
-        break-point.
+        message ref_root->get_text( ) type 'A'.
     endtry.
   endmethod.
   method dec_to_dec_both.
