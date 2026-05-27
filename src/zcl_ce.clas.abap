@@ -81,85 +81,113 @@ public section.
     raising
       ZCX_CE_T100 .
   protected section.
-  private section.
+private section.
 
-    class-data:
-      begin of s_usr_default
+  class-data:
+    begin of s_usr_default
                     , x_dcpfm type xsdboolean
                     , dcpfm type xudcpfm
                     , decimal_sep type c
                     , group_sep type c
                     , end of s_usr_default .
-    class-data:
-      t_tcurx type table of tcurx .
+  class-data:
+    t_tcurx type table of tcurx .
 
-    class-methods get_user_dec_notation
-      returning
-        value(dcpfm) type xudcpfm .
-    class-methods input_packed
-      importing
-        !ref_ed_in type ref to cl_abap_elemdescr
-        !input     type any
-        !waers     type any optional
-      exporting
-        !output    type any
-      raising
-        zcx_ce_t100 .
-    class-methods input_packed_curr
-      importing
-        !input  type any
-        !waers  type any
-      exporting
-        !output type any
-      raising
-        zcx_ce_t100 .
-    class-methods input_to_number
-      importing
-        !input  type any
-      exporting
-        !output type any .
-    class-methods output_from_number
-      importing
-        !ref_td_out type ref to cl_abap_typedescr
-        !input      type any
-      exporting
-        !output     type any
-      raising
-        zcx_ce_t100 .
-    class-methods output_packed
-      importing
-        !input      type any
-        !waers      type any optional
-        !msehi      type any optional
-        !ref_ed_out type ref to cl_abap_elemdescr
-      exporting
-        !output     type any
-      raising
-        zcx_ce_t100 .
-    class-methods output_packed_curr
-      importing
-        !input  type any
-        !waers  type any
-      exporting
-        !output type any
-      raising
-        zcx_ce_t100 .
-    class-methods output_packed_other
-      importing
-        !input      type any
-        !ref_ed_out type ref to cl_abap_elemdescr
-      exporting
-        !output     type any
-      raising
-        zcx_ce_t100 .
-    class-methods output_packed_quan
-      importing
-        !input  type any
-        !msehi  type any
-      exporting
-        !output type any
-      raising
-        zcx_ce_t100 .
+  class-methods GET_USER_DEC_NOTATION
+    returning
+      value(DCPFM) type XUDCPFM .
+  class-methods INPUT_PACKED
+    importing
+      !REF_ED_IN type ref to CL_ABAP_ELEMDESCR
+      !INPUT type ANY
+      !WAERS type ANY optional
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods INPUT_PACKED_CURR
+    importing
+      !INPUT type ANY
+      !WAERS type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods INPUT_TO_NUMBER
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY .
+  class-methods OUTPUT_FROM_NUMBER
+    importing
+      !REF_TD_OUT type ref to CL_ABAP_TYPEDESCR
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_PACKED
+    importing
+      !INPUT type ANY
+      !WAERS type ANY optional
+      !MSEHI type ANY optional
+      !REF_ED_OUT type ref to CL_ABAP_ELEMDESCR
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_PACKED_CURR
+    importing
+      !INPUT type ANY
+      !WAERS type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_PACKED_OTHER
+    importing
+      !INPUT type ANY
+      !REF_ED_OUT type ref to CL_ABAP_ELEMDESCR
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_PACKED_QUAN
+    importing
+      !INPUT type ANY
+      !MSEHI type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_DATE
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods INPUT_DATE
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_TIME
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods INPUT_TIME
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
 ENDCLASS.
 
 
@@ -304,12 +332,29 @@ CLASS ZCL_CE IMPLEMENTATION.
                                               waers = waers
                                    importing output = output ).
           when cl_abap_tabledescr=>typekind_date.
-            call_ce_input( exporting convexit = 'BCVDT' input = input importing output = output ).
+            input_date( exporting input  = input
+                        importing output = output ).
           when cl_abap_tabledescr=>typekind_time.
-            call_ce_input( exporting convexit = 'BCVTM' input = input importing output = output ).
+            input_time( exporting input  = input
+                        importing output = output ).
         endcase.
       endif.
     endif.
+  endmethod.
+
+
+  method input_date.
+    data: lv_char128  type c length 128.
+    data: begin of ls_date
+        , day type c length 2
+        , sep1 type c length 1
+        , month type c length 2
+        , sep2 type c length 1
+        , year type c length 4
+        , end of ls_date.
+    lv_char128 = input.
+    ls_date = lv_char128.
+    output = |{ ls_date-year }{ ls_date-month }{ ls_date-day }|.
   endmethod.
 
 
@@ -340,6 +385,21 @@ CLASS ZCL_CE IMPLEMENTATION.
 
   method input_packed_curr.
     output = input * ipow( base = 10 exp = get_waers_shift_in( waers ) ).
+  endmethod.
+
+
+  method INPUT_TIME.
+    data: lv_char128  type c length 128.
+    data: begin of ls_time
+        , hour type c length 2
+        , sep1 type c length 1
+        , minute type c length 2
+        , sep2 type c length 1
+        , second type c length 2
+        , end of ls_time.
+    lv_char128 = input.
+    ls_time = lv_char128.
+    output = |{ ls_time-hour }{ ls_time-minute }{ ls_time-second }|.
   endmethod.
 
 
@@ -400,12 +460,27 @@ CLASS ZCL_CE IMPLEMENTATION.
                                     ref_ed_out = ref_ed_out
                                     importing output = output ).
           when cl_abap_typedescr=>typekind_date.
-            call_ce_output( exporting convexit = 'BCVDT' input = input importing output = output ).
+            output_date( exporting input  = input
+                         importing output = output ).
           when cl_abap_typedescr=>typekind_time.
-            call_ce_output( exporting convexit = 'BCVTM' input = input importing output = output ).
+            output_time( exporting input  = input
+                         importing output = output ).
         endcase.
       endif.
     endif.
+  endmethod.
+
+
+  method output_date.
+    data: lv_char128  type c length 128.
+    data: begin of ls_date
+        , year type c length 4
+        , month type c length 2
+        , day type c length 2
+        , end of ls_date.
+        lv_char128 = input.
+    ls_date = lv_char128.
+    output = |{ ls_date-day }.{ ls_date-month }.{ ls_date-year }|.
   endmethod.
 
 
@@ -484,5 +559,18 @@ CLASS ZCL_CE IMPLEMENTATION.
                  changing output = output ).
       catch zcx_ce_t100 into data(ref_ce_t100).
     endtry.
+  endmethod.
+
+
+  method OUTPUT_TIME.
+    data: lv_char128  type c length 128.
+    data: begin of ls_time
+        , hour type c length 2
+        , minute type c length 2
+        , second type c length 2
+        , end of ls_time.
+        lv_char128 = input.
+    ls_time = lv_char128.
+    output = |{ ls_time-hour }:{ ls_time-minute }:{ ls_time-second }|.
   endmethod.
 ENDCLASS.
