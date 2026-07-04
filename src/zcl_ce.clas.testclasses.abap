@@ -28,6 +28,8 @@ class ltcl_test definition for testing
            , char_both for testing raising cx_static_check
            , string_both for testing raising cx_static_check
            , curr_overflow for testing raising cx_static_check
+           , waers_dec_not_found for testing raising cx_static_check
+           , waers_dec_rfc_error for testing raising cx_static_check
            , object_not_suported for testing raising cx_static_check
            , structure_not_suported for testing raising cx_static_check
            , action_not_suported_both importing test_name type string
@@ -248,6 +250,30 @@ class ltcl_test implementation.
         message ref_root->get_text( ) type 'A'.
     endtry.
   endmethod.
+  method waers_dec_not_found.
+    data(lv_currdec) = zcl_ce=>get_waers_dec( 'ZZZ' ).
+    cl_abap_unit_assert=>assert_equals( act = lv_currdec
+                                        exp = 2
+                                        msg = 'Unknown currency should default to 2 decimals' ).
+  endmethod.
+
+  method waers_dec_rfc_error.
+    data: lv_currdec type currdec.
+
+    test-injection ce_get_waers_dec_lookup.
+      lv_subrc = 2.
+    end-test-injection.
+
+    try.
+        lv_currdec = zcl_ce=>get_waers_dec( 'ZZQ' ).
+        cl_abap_unit_assert=>fail( 'GET_WAERS_DEC should have raised ZCX_CE_T100' ).
+      catch zcx_ce_t100 into data(ref_t100).
+        cl_abap_unit_assert=>assert_equals( act = ref_t100->get_msgid_msgno( )
+                                            exp = 'ZCL_CE001'
+                                            msg = 'Unexpected error message raised' ).
+    endtry.
+  endmethod.
+
   method dec_to_dec_both.
     data: lv_value type p length 10 decimals 3 value '-12345.678'
         , lv_value_new like lv_value

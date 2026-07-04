@@ -252,27 +252,32 @@ CLASS ZCL_CE IMPLEMENTATION.
 
 
   method get_waers_dec.
+    data: lv_subrc type sy-subrc.
+
     read table t_tcurx
      assigning field-symbol(<ls_tcurx>)
           with key currkey = waers.
     if sy-subrc ne 0.
       append initial line to t_tcurx assigning <ls_tcurx>.
-      call function 'DD_GET_CURRENCY_INFO'
-        exporting
-          currency_key  = waers
-        importing
-          currency_info = <ls_tcurx>
-        exceptions
-          not_found     = 1
-          others        = 2.
-      case sy-subrc.
+      test-seam ce_get_waers_dec_lookup.
+        call function 'DD_GET_CURRENCY_INFO'
+          exporting
+            currency_key  = waers
+          importing
+            currency_info = <ls_tcurx>
+          exceptions
+            not_found     = 1
+            others        = 2.
+        lv_subrc = sy-subrc.
+      end-test-seam.
+      case lv_subrc.
         when 0.
           "OK
         when 1.
           <ls_tcurx>-currkey = waers.
           <ls_tcurx>-currdec = 2.
         when others.
-          zcx_ce_t100=>raise( msgid = 'ZCL_DE' msgno = '001' msgv1 = 'DD_GET_CURRENCY_INFO' ). "Un expected error calling function module &
+          zcx_ce_t100=>raise( msgid = 'ZCL_CE' msgno = '001' msgv1 = 'DD_GET_CURRENCY_INFO' ). "Un expected error calling function module &
       endcase.
     endif.
     currdec = <ls_tcurx>-currdec.
