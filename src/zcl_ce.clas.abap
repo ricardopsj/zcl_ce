@@ -7,6 +7,7 @@ public section.
 
   types TY_SHIFT type I .
 
+  class-methods CLASS_CONSTRUCTOR .
   class-methods CALL_CE_FUNCTION
     importing
       !CONVEXIT type CLIKE
@@ -62,15 +63,6 @@ public section.
       !OUTPUT type ANY
     raising
       ZCX_CE_T100 .
-  class-methods OUTPUT_STRING
-    importing
-      !INPUT type ANY
-      !WAERS type ANY optional
-      !MSEHI type ANY optional
-    returning
-      value(OUTPUT) type STRING
-    raising
-      ZCX_CE_T100 .
   class-methods OUTPUT
     importing
       !INPUT type ANY
@@ -78,6 +70,15 @@ public section.
       !MSEHI type ANY optional
     changing
       !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
+  class-methods OUTPUT_STRING
+    importing
+      !INPUT type ANY
+      !WAERS type ANY optional
+      !MSEHI type ANY optional
+    returning
+      value(OUTPUT) type STRING
     raising
       ZCX_CE_T100 .
   protected section.
@@ -96,6 +97,13 @@ private section.
   class-methods GET_USER_DEC_NOTATION
     returning
       value(DCPFM) type XUDCPFM .
+  class-methods INPUT_DATE
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
   class-methods INPUT_PACKED
     importing
       !REF_ED_IN type ref to CL_ABAP_ELEMDESCR
@@ -113,11 +121,25 @@ private section.
       !OUTPUT type ANY
     raising
       ZCX_CE_T100 .
+  class-methods INPUT_TIME
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
   class-methods INPUT_TO_NUMBER
     importing
       !INPUT type ANY
     exporting
       !OUTPUT type ANY .
+  class-methods OUTPUT_DATE
+    importing
+      !INPUT type ANY
+    exporting
+      !OUTPUT type ANY
+    raising
+      ZCX_CE_T100 .
   class-methods OUTPUT_FROM_NUMBER
     importing
       !REF_TD_OUT type ref to CL_ABAP_TYPEDESCR
@@ -160,28 +182,7 @@ private section.
       !OUTPUT type ANY
     raising
       ZCX_CE_T100 .
-  class-methods OUTPUT_DATE
-    importing
-      !INPUT type ANY
-    exporting
-      !OUTPUT type ANY
-    raising
-      ZCX_CE_T100 .
-  class-methods INPUT_DATE
-    importing
-      !INPUT type ANY
-    exporting
-      !OUTPUT type ANY
-    raising
-      ZCX_CE_T100 .
   class-methods OUTPUT_TIME
-    importing
-      !INPUT type ANY
-    exporting
-      !OUTPUT type ANY
-    raising
-      ZCX_CE_T100 .
-  class-methods INPUT_TIME
     importing
       !INPUT type ANY
     exporting
@@ -215,6 +216,11 @@ CLASS ZCL_CE IMPLEMENTATION.
     call_ce_function( exporting input = input convexit = convexit dir = 'OUTPUT' importing output = output ).
     shift output right deleting trailing space.
     shift output left deleting leading space.
+  endmethod.
+
+
+  method class_constructor.
+    get_user_dec_notation( ).
   endmethod.
 
 
@@ -272,7 +278,7 @@ CLASS ZCL_CE IMPLEMENTATION.
           <ls_tcurx>-currkey = waers.
           <ls_tcurx>-currdec = 2.
         when others.
-          zcx_ce_t100=>raise( msgid = 'ZCL_DE' msgno = '001' msgv1 = 'DD_GET_CURRENCY_INFO' ). "Un expected error calling function module &
+          zcx_ce_t100=>raise( msgid = 'ZCL_CE' msgno = '001' msgv1 = 'DD_GET_CURRENCY_INFO' ). "Un expected error calling function module &
       endcase.
     endif.
     currdec = <ls_tcurx>-currdec.
@@ -366,7 +372,6 @@ CLASS ZCL_CE IMPLEMENTATION.
       when cl_abap_tabledescr=>typekind_char
      or cl_abap_tabledescr=>typekind_clike
      or cl_abap_tabledescr=>typekind_string.
-        get_user_dec_notation( ).
         lv_str_input = input.
         replace all occurrences of s_usr_default-group_sep in lv_str_input with ''.
         replace all occurrences of s_usr_default-decimal_sep in lv_str_input with '.'.
