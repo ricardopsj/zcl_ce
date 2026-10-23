@@ -80,3 +80,12 @@ Excepción `CX_STATIC_CHECK` basada en mensajes T100 (`IF_T100_MESSAGE` / `IF_T1
 ## Tests
 
 `ZCL_CE` incluye una suite ABAP Unit (`ltcl_test`) que cubre ida y vuelta (`output` + `input`) para QUAN, CURR, DEC, INT, FLOAT, NUMC, CHAR, STRING, fecha, hora, overflow de moneda y rechazo de tipos no soportados (objetos y estructuras). Ejecutar con `Ctrl+Shift+F10` en ADT o SE80 → Test Unit.
+
+## Problemas conocidos
+
+- **Monedas con 3 o más decimales.** `output_packed_curr` usa un paquete de 2 decimales, así que monedas como KWD, BHD u OMR pierden el tercer decimal. Los tests solo cubren CLP.
+- **Conversion exits que fallan.** `call_ce_function` no captura excepciones: un exit inexistente, o uno que levanta una excepción clásica (por ejemplo `CUNIT` con una unidad desconocida), termina en dump.
+- **Texto no numérico en `input`.** Convertir un texto inválido a número o importe levanta `CX_SY_CONVERSION_NO_NUMBER`, no `ZCX_CE_T100`.
+- **Mensaje 000.** En `input` y `output`, los textos "input" y "output" del mensaje están intercambiados.
+- **Formato de fecha y hora fijo.** Siempre `DD.MM.YYYY` y `HH:MM:SS`, sin respetar la configuración del usuario.
+- **`output_string`** devuelve un string vacío ante cualquier error.
